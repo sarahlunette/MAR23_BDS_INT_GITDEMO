@@ -6,13 +6,13 @@ import matplotlib.pyplot as plt
 import plotly.express as px 
 import pybase64 as base64
 import netCDF4
-import xarray as xr
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
+import xarray as xr
 
-pages = ['Statistics on Icebreaker', 'Prediction of icebergs', 'Is Leonardo DiCaprio really dead ?']
+pages = ['Statistics on Icebreaker', 'Prediction of icebergs', 'Is Leonardo DiCaprio really dead ?', 'No']
 
 st.sidebar.title('Navigation')
 page = st.sidebar.radio("What\'s on your mind ?", pages)
@@ -21,7 +21,7 @@ page = st.sidebar.radio("What\'s on your mind ?", pages)
 df = pd.read_csv('AAD_Iceberg_database_1979-1984_version_2022-06-28.csv')
 number_of_icebergs = df['Total'].sum()
 
-df = df[['Obs_Date_NZ', 'Obs_Lat', 'Obs_Lon', 'Total', 'size1','size2', 'size3', 'size4', 'size5']]
+df = df[['Obs_Date_NZ', 'Obs_Lat', 'Obs_Lon', 'Total', 'size','size2', 'size3', 'size4', 'size5']]
 df['Obs_Date_NZ'] = df['Obs_Date_NZ'].apply(str)
 df['Obs_Date_NZ'][0]
 df['Obs_Date_NZ']  = df['Obs_Date_NZ'].replace(r'\\', '-', regex=True)
@@ -50,7 +50,7 @@ df['month'] = df['Obs_Date_NZ'].dt.month
 df = df.drop('Obs_Date_NZ', axis = 1)
 df.drop('T', axis = 1, inplace = True)
 
-X = df.drop('Total', axis = 1)
+X = df.drop('Total', axis = 1).replace(1, 2, axis =1)
 y = df['Total']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
 
